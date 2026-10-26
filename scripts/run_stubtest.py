@@ -80,9 +80,11 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--real", action="store_true", help="use the Webots installation in WEBOTS_HOME")
     mode.add_argument("--webots-home", type=Path, help="use the Webots installation in this directory")
-    args, stubtest_args = parser.parse_known_args()
-    if stubtest_args[:1] == ["--"]:
-        stubtest_args = stubtest_args[1:]
+    own_args, stubtest_args = sys.argv[1:], []
+    if "--" in own_args:
+        split = own_args.index("--")
+        own_args, stubtest_args = own_args[:split], own_args[split + 1 :]
+    args = parser.parse_args(own_args)
 
     if args.webots_home is not None or args.real:
         home = args.webots_home or Path(os.environ["WEBOTS_HOME"])
