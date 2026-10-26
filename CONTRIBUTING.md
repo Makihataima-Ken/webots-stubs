@@ -67,7 +67,8 @@ names the stubs miss and stub items without a docstring.
 against the stubs. Errors that are problems of the samples themselves are listed in
 `tests/samples/known_errors.txt`, each with a reason; any other error, typically a stub
 that is too strict, fails the check. After an intended change, refresh the list with
-`--update` and give every new entry a reason.
+`--update` and give every new entry a reason: the check fails while an entry has none
+or still reads "TODO: explain".
 
 ## Typing conventions
 

@@ -5,7 +5,7 @@ real API. Type-checking them with the stubs catches stubs that are too strict or
 wrong: valid controller code must not produce errors. Errors that are genuine problems in
 the samples themselves are recorded, one per line and followed by ``  # <reason>``, in
 ``tests/samples/known_errors.txt``; any other error fails the check, as does a recorded
-error that no longer occurs.
+error that no longer occurs or that has no reason yet.
 
 Each controller directory is checked separately (sample controllers reuse module names),
 with mypy's ``check_untyped_defs`` so that unannotated functions are checked too.
@@ -35,6 +35,7 @@ KNOWN_ERRORS_HEADER = (
     "# Errors reported by scripts/check_samples.py in the Webots sample controllers that are\n"
     "# problems of the samples themselves, not of the stubs. One per line: <error>  # <reason>\n"
 )
+TODO_REASON = "TODO: explain"
 ERROR_LINE = re.compile(r"^(?P<path>[^:]+\.py):(?P<line>\d+): error: (?P<message>.*)$")
 
 
@@ -101,21 +102,27 @@ def main() -> int:
 
     known = _read_known_errors()
     if args.update:
-        lines = [f"{error}  # {known.get(error) or 'TODO: explain'}\n" for error in errors]
+        reasons = {error: known.get(error) or TODO_REASON for error in errors}
+        lines = [f"{error}  # {reason}\n" for error, reason in reasons.items()]
         KNOWN_ERRORS.write_text(KNOWN_ERRORS_HEADER + "".join(lines), encoding="utf-8", newline="\n")
-        print(f"Recorded {len(errors)} error(s) in {KNOWN_ERRORS.relative_to(ROOT).as_posix()}")
+        todo = sum(reason == TODO_REASON for reason in reasons.values())
+        print(f"Recorded {len(errors)} error(s) in {KNOWN_ERRORS.relative_to(ROOT).as_posix()}; {todo} need a reason")
         return 0
 
     new = [error for error in errors if error not in known]
     fixed = sorted(known.keys() - set(errors))
+    unexplained = sorted(error for error, reason in known.items() if reason.strip() in ("", TODO_REASON))
     for error in new:
         print(f"new error: {error}")
     for error in fixed:
         print(f"no longer reported (remove it from {KNOWN_ERRORS.name}): {error}")
+    for error in unexplained:
+        print(f"no reason given (explain it in {KNOWN_ERRORS.name}): {error}")
     print(
-        f"Checked {len(directories)} controller directories: {len(errors)} error(s), {len(new)} new, {len(fixed)} fixed"
+        f"Checked {len(directories)} controller directories: {len(errors)} error(s), {len(new)} new,"
+        f" {len(fixed)} fixed, {len(unexplained)} without a reason"
     )
-    return 1 if new or fixed else 0
+    return 1 if new or fixed or unexplained else 0
 
 
 if __name__ == "__main__":
