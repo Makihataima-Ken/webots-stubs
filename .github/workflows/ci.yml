@@ -122,10 +122,12 @@ jobs:
           unzip -l dist/*.whl | grep -q "controller-stubs/__init__.pyi"
           unzip -l dist/*.whl | grep -q "vehicle-stubs/__init__.pyi"
       - name: Type-check the examples against the installed wheel
-        # Outside the repository, so that only the installed stubs can be found.
+        # Outside the repository, so that only the installed stubs can be found. The type
+        # checkers are pinned to the versions of uv.lock, like in the other jobs.
         run: |
+          uv export --locked --only-group dev --no-hashes --no-emit-project -o "$RUNNER_TEMP/dev-requirements.txt"
           uv venv "$RUNNER_TEMP/venv"
-          uv pip install --python "$RUNNER_TEMP/venv" dist/*.whl mypy pyright
+          uv pip install --python "$RUNNER_TEMP/venv" dist/*.whl -r "$RUNNER_TEMP/dev-requirements.txt"
           mkdir "$RUNNER_TEMP/check"
           cp -r examples tests/typecheck "$RUNNER_TEMP/check/"
           cd "$RUNNER_TEMP/check"
