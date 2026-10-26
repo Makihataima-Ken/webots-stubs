@@ -10,8 +10,9 @@ the conventions every stub follows.
 src/controller/      stubs for the `controller` package (one .pyi per upstream module)
 src/vehicle/         stubs for the `vehicle` package (Driver, Car)
 tests/typecheck/     code that is type-checked (never run) to pin down the stubs' behavior
-tests/stubtest/      stubtest configuration and allowlists
-scripts/             maintenance scripts (fetching upstream sources, stubtest, API coverage)
+tests/stubtest/      stubtest configuration and allowlist
+tests/samples/       configuration and known errors of the sample-controller check
+scripts/             maintenance scripts (fetching upstream sources, stubtest, checks)
 examples/            small typed controllers, type-checked in CI
 ```
 
@@ -26,9 +27,11 @@ You need [uv](https://docs.astral.sh/uv/) and git.
 ```sh
 uv sync                                 # create .venv with the development tools
 uv run python scripts/fetch_upstream.py # fetch the Webots sources into .upstream/
+uv run pre-commit install               # optional: format and lint on every commit
 ```
 
-`fetch_upstream.py` downloads, for the targeted Webots release, the Python API
+The targeted Webots release is set once, by `webots-tag` in the `[tool.webots-stubs]`
+table of `pyproject.toml`. For that release, `fetch_upstream.py` downloads the Python API
 (`lib/controller/python`), the reference manual (`docs/reference`, `docs/automobile`)
 and the sample controllers (`projects/**/controllers`). The stubs are written and
 checked against these files.
@@ -41,6 +44,7 @@ Run them all before opening a pull request; CI runs the same commands.
 uv run ruff format --check .
 uv run ruff check .
 uv run mypy src tests examples
+uv run mypy scripts
 uv run pyright
 uv run python scripts/run_stubtest.py
 uv run python scripts/check_api_coverage.py
@@ -55,6 +59,15 @@ signature and constant with the stubs. It works without a Webots installation
 names (e.g. `controller.motor`) to check only those. Intentional differences
 between stubs and runtime go in `tests/stubtest/allowlist.txt`, each with a
 comment explaining why.
+
+`check_api_coverage.py` parses the upstream sources and the stubs, and reports public
+names the stubs miss and stub items without a docstring.
+
+`check_samples.py` type-checks the Python sample controllers shipped with Webots
+against the stubs. Errors that are problems of the samples themselves are listed in
+`tests/samples/known_errors.txt`, each with a reason; any other error, typically a stub
+that is too strict, fails the check. After an intended change, refresh the list with
+`--update` and give every new entry a reason.
 
 ## Typing conventions
 
@@ -123,13 +136,21 @@ used for property setters, `__del__` and constructors users do not call themselv
 
 ## Updating to a new Webots release
 
-1. Fetch the new sources: `uv run python scripts/fetch_upstream.py --tag R20XXy`.
-2. Point the scripts and CI at the new tag, then run the checks. stubtest and
-   `check_api_coverage.py` list everything that was added, removed or changed.
+The weekly *Upstream drift* workflow compares the stubs with the `master` branch of
+Webots and opens an issue when they differ, so most changes are known before a release.
+
+1. Set `webots-tag` in `pyproject.toml` to the new release (e.g. `R2026a`) and fetch it:
+   `uv run python scripts/fetch_upstream.py`.
+2. Run the checks. stubtest and `check_api_coverage.py` list everything that was added,
+   removed or changed; `check_samples.py --update` refreshes the sample errors.
 3. Update the stubs and docstrings, then the version in `pyproject.toml`: release
    `R20XXa` maps to `20XX.1.N` and `R20XXb` to `20XX.2.N`, `N` counting stub releases
    for that Webots release.
-4. Add a `CHANGELOG.md` entry.
+4. Add a `CHANGELOG.md` entry and the new row of the version table in `README.md`.
+
+To publish a release, push a tag `v<version>` (e.g. `v2025.1.0`): the *Release*
+workflow checks that it matches `pyproject.toml`, builds the distribution and
+publishes it to PyPI with trusted publishing.
 
 ## Pull requests
 
