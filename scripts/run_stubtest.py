@@ -13,7 +13,7 @@ real Webots installation instead.
 Usage::
 
     python scripts/fetch_upstream.py
-    python scripts/run_stubtest.py [MODULE ...] [--tag R2025a] [--real | --webots-home DIR] [-- stubtest args]
+    python scripts/run_stubtest.py [MODULE ...] [--tag TAG] [--real | --webots-home DIR] [-- stubtest args]
 
 MODULE defaults to the ``controller`` and ``vehicle`` packages; naming modules such as
 ``controller.motor`` restricts the check to them.
@@ -28,7 +28,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-ROOT = Path(__file__).resolve().parent.parent
+from _upstream import ROOT, upstream_dir, webots_tag
+
 STUBTEST_DIR = ROOT / "tests" / "stubtest"
 PACKAGES = ["controller", "vehicle"]
 
@@ -51,7 +52,7 @@ class _FakeLibrary(ctypes.CDLL):
         self._handle = 0
         self._functions: dict[str, _FakeFunction] = {}
 
-    def __getattr__(self, name: str) -> _FakeFunction:
+    def __getattr__(self, name: str) -> _FakeFunction:  # type: ignore[override]
         if name.startswith("__") and name.endswith("__"):
             raise AttributeError(name)
         return self._functions.setdefault(name, _FakeFunction())
@@ -62,7 +63,7 @@ class _FakeLibrary(ctypes.CDLL):
 
 def _install_fake_libcontroller() -> None:
     os.environ.setdefault("WEBOTS_HOME", str(ROOT / ".upstream" / "fake-webots-home"))
-    ctypes.cdll.LoadLibrary = _FakeLibrary  # type: ignore[assignment,method-assign]
+    ctypes.cdll.LoadLibrary = _FakeLibrary  # type: ignore[method-assign]
 
     def in_dll(cls: type[Any], library: object, name: str) -> Any:
         # Exported constants of the C library (e.g. wb_ROTATIONAL) read as 0 or "".
@@ -75,7 +76,7 @@ def _install_fake_libcontroller() -> None:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("modules", nargs="*", default=PACKAGES, help="modules to check (default: all)")
-    parser.add_argument("--tag", default="R2025a", help="upstream tag fetched into .upstream/ (default: R2025a)")
+    parser.add_argument("--tag", default=webots_tag(), help="fetched upstream tag (default: %(default)s)")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--real", action="store_true", help="use the Webots installation in WEBOTS_HOME")
     mode.add_argument("--webots-home", type=Path, help="use the Webots installation in this directory")
@@ -88,9 +89,7 @@ def main() -> int:
         os.environ["WEBOTS_HOME"] = str(home)
         python_dir = home / ("Contents" if sys.platform == "darwin" else "") / "lib" / "controller" / "python"
     else:
-        python_dir = ROOT / ".upstream" / args.tag / "lib" / "controller" / "python"
-        if not python_dir.is_dir():
-            sys.exit(f"{python_dir} not found; run scripts/fetch_upstream.py --tag {args.tag} first")
+        python_dir = upstream_dir(args.tag) / "lib" / "controller" / "python"
         _install_fake_libcontroller()
     sys.path.insert(0, str(python_dir))
 
@@ -98,6 +97,9 @@ def main() -> int:
 
     allowlists = [STUBTEST_DIR / "allowlist.txt", STUBTEST_DIR / f"allowlist_{sys.platform}.txt"]
     argv = [*args.modules, "--mypy-config-file", str(STUBTEST_DIR / "mypy.ini")]
+    if sorted(args.modules) != PACKAGES:
+        # Entries about modules outside a partial run are expected to be unused.
+        argv.append("--ignore-unused-allowlist")
     for allowlist in allowlists:
         if allowlist.is_file():
             argv += ["--allowlist", str(allowlist)]

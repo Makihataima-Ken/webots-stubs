@@ -1,0 +1,11 @@
+# Intentional differences between the stubs and the runtime, as reported by stubtest.
+# Every entry needs a comment saying why it cannot be fixed in the stubs.
+
+# Upstream defines __all__ as a list of classes instead of names, so stubtest (and
+# `from controller import *`) cannot import the packages; their submodules are still checked.
+controller
+vehicle
+
+# Car.__init__ replaces the inherited class attribute Driver.api (the driver library, or
+# None before it is loaded) with an instance attribute holding the car library.
+vehicle.car.Car.api

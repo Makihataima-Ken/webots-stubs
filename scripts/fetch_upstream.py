@@ -10,7 +10,10 @@ using a shallow, blob-filtered, sparse clone so that only those files are transf
 
 Usage::
 
-    python scripts/fetch_upstream.py [--tag R2025a] [--dest .upstream] [--force]
+    python scripts/fetch_upstream.py [--tag TAG] [--dest .upstream] [--force]
+
+TAG defaults to ``webots-tag`` in the ``[tool.webots-stubs]`` table of pyproject.toml; any
+Webots git tag or branch (e.g. ``master``) works.
 """
 
 from __future__ import annotations
@@ -24,9 +27,9 @@ import sys
 from collections.abc import Callable
 from pathlib import Path
 
+from _upstream import ROOT, webots_tag
+
 REPO_URL = "https://github.com/cyberbotics/webots.git"
-DEFAULT_TAG = "R2025a"
-ROOT = Path(__file__).resolve().parent.parent
 SPARSE_PATTERNS = (
     "/lib/controller/python/",
     "/docs/reference/*.md",
@@ -68,7 +71,7 @@ def fetch(tag: str, dest: Path, *, force: bool = False) -> Path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--tag", default=DEFAULT_TAG, help=f"Webots release tag (default: {DEFAULT_TAG})")
+    parser.add_argument("--tag", default=webots_tag(), help="Webots tag or branch (default: %(default)s)")
     parser.add_argument("--dest", type=Path, default=ROOT / ".upstream", help="destination directory")
     parser.add_argument("--force", action="store_true", help="delete and fetch again if already present")
     args = parser.parse_args()

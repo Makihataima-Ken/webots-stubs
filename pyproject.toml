@@ -42,6 +42,10 @@ dev = [
     "pre-commit>=4",
 ]
 
+[tool.webots-stubs]
+# The Webots release the stubs describe; the maintenance scripts fetch and check this tag.
+webots-tag = "R2025a"
+
 [tool.uv]
 # The stubs are developed in importable directories (src/controller, src/vehicle) that the
 # type checkers read through mypy_path/stubPath; the wheel renames them to PEP 561
@@ -69,6 +73,8 @@ include = [
 line-length = 120
 target-version = "py310"
 extend-exclude = [".upstream"]
+# The maintenance scripts need Python 3.11 (tomllib); the stubs and tests support 3.10.
+per-file-target-version = { "scripts/**" = "py311" }
 
 [tool.ruff.lint]
 select = [
