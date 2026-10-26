@@ -1,0 +1,3 @@
+from .wb import wb as wb
+
+def constant(name, type=...): ...
