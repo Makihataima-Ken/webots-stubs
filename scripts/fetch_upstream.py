@@ -3,7 +3,7 @@
 For one Webots release tag this downloads:
 
 * the Python controller API (``lib/controller/python``),
-* the reference documentation (``docs/reference/*.md``),
+* the reference documentation (``docs/reference/*.md`` and ``docs/automobile/*.md``),
 * the Python sample controllers (``projects/**/controllers/**/*.py``),
 
 using a shallow, blob-filtered, sparse clone so that only those files are transferred.
@@ -30,6 +30,7 @@ ROOT = Path(__file__).resolve().parent.parent
 SPARSE_PATTERNS = (
     "/lib/controller/python/",
     "/docs/reference/*.md",
+    "/docs/automobile/*.md",
     "/projects/**/controllers/**/*.py",
 )
 

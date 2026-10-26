@@ -10,7 +10,7 @@ readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE", "NOTICE"]
 authors = [{ name = "Ken", email = "ahmadsoud63@gmail.com" }]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 keywords = ["webots", "robotics", "simulation", "robot", "stubs", "typing", "mypy", "pyright", "pep561"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -20,7 +20,6 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
@@ -68,7 +67,7 @@ include = [
 
 [tool.ruff]
 line-length = 120
-target-version = "py39"
+target-version = "py310"
 extend-exclude = [".upstream"]
 
 [tool.ruff.lint]
@@ -103,4 +102,6 @@ stubPath = "src"
 typeCheckingMode = "strict"
 reportUnnecessaryTypeIgnoreComment = "error"
 reportDeprecated = "error"
-pythonVersion = "3.9"
+# Stub-only project: the runtime modules are never installed next to the stubs.
+reportMissingModuleSource = false
+pythonVersion = "3.10"
