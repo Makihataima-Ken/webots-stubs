@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from typing import Final
 
 from .node import Node
@@ -288,25 +289,25 @@ class Field:
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_set_mf_float
         """
 
-    def setMFVec2f(self, index: int, value: list[float]) -> None:
+    def setMFVec2f(self, index: int, value: Sequence[float]) -> None:
         """Set the item at `index` `[x, y]` of a MFVec2f field.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_set_mf_vec2f
         """
 
-    def setMFVec3f(self, index: int, value: list[float]) -> None:
+    def setMFVec3f(self, index: int, value: Sequence[float]) -> None:
         """Set the item at `index` `[x, y, z]` of a MFVec3f field.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_set_mf_vec3f
         """
 
-    def setMFRotation(self, index: int, value: list[float]) -> None:
+    def setMFRotation(self, index: int, value: Sequence[float]) -> None:
         """Set the item at `index` `[x, y, z, angle]` of a MFRotation field [rad].
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_set_mf_rotation
         """
 
-    def setMFColor(self, index: int, value: list[float]) -> None:
+    def setMFColor(self, index: int, value: Sequence[float]) -> None:
         """Set the item at `index` `[r, g, b]` of a MFColor field.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_set_mf_color
@@ -336,25 +337,25 @@ class Field:
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_insert_mf_float
         """
 
-    def insertMFVec2f(self, index: int, value: list[float]) -> None:
+    def insertMFVec2f(self, index: int, value: Sequence[float]) -> None:
         """Insert an item at `index` (-1 appends) `[x, y]` of a MFVec2f field.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_insert_mf_vec2f
         """
 
-    def insertMFVec3f(self, index: int, value: list[float]) -> None:
+    def insertMFVec3f(self, index: int, value: Sequence[float]) -> None:
         """Insert an item at `index` (-1 appends) `[x, y, z]` of a MFVec3f field.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_insert_mf_vec3f
         """
 
-    def insertMFRotation(self, index: int, value: list[float]) -> None:
+    def insertMFRotation(self, index: int, value: Sequence[float]) -> None:
         """Insert an item at `index` (-1 appends) `[x, y, z, angle]` of a MFRotation field [rad].
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_insert_mf_rotation
         """
 
-    def insertMFColor(self, index: int, value: list[float]) -> None:
+    def insertMFColor(self, index: int, value: Sequence[float]) -> None:
         """Insert an item at `index` (-1 appends) `[r, g, b]` of a MFColor field.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_field_insert_mf_color

@@ -66,6 +66,7 @@ display.opacity = 1.0
 display.setFont("Arial", 16, True)
 display.drawText("hello", 0, 0)
 display.drawPolygon([0, 10, 5], [0, 0, 10])
+display.fillPolygon((0, 10, 5), (0, 0, 10))
 display.drawLine(0, 0, 10, 10)
 # Clipboard images are None when the file is unreadable or the arguments are invalid.
 image = display.imageLoad("icon.png")

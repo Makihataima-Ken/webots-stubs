@@ -13,6 +13,9 @@ Robot.EVENT_QUIT = 0  # type: ignore[misc]
 
 supervisor = Supervisor()
 supervisor.getFromDef("ROBOT").getField("translation")  # type: ignore[union-attr]
+translation = supervisor.getSelf().getField("translation")
+assert translation is not None
+translation.setSFVec3f((0.0, 0.0, 1.0))  # type: ignore[arg-type]
 
 display = Display("display")
 display.imageDelete(display.imageLoad("icon.png"))  # type: ignore[arg-type]

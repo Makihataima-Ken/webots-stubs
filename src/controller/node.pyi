@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from typing import Final
 
 from .field import Field
@@ -239,7 +240,7 @@ class Node:
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_get_velocity
         """
 
-    def setVelocity(self, velocity: list[float]) -> None:
+    def setVelocity(self, velocity: Sequence[float]) -> None:
         """Set the absolute velocity `[vx, vy, vz, wx, wy, wz]` of the node [m/s, rad/s].
 
         The node must be a Solid.
@@ -292,7 +293,7 @@ class Node:
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_set_visibility
         """
 
-    def addForce(self, force: list[float], relative: bool) -> None:
+    def addForce(self, force: Sequence[float], relative: bool) -> None:
         """Add a force `[fx, fy, fz]` [N] to a Solid node at its center of mass.
 
         The force is in the node's coordinate system if `relative` is `True`, else in world coordinates.
@@ -300,7 +301,7 @@ class Node:
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_add_force
         """
 
-    def addForceWithOffset(self, force: list[float], offset: list[float], relative: bool) -> None:
+    def addForceWithOffset(self, force: Sequence[float], offset: Sequence[float], relative: bool) -> None:
         """Add a force `[fx, fy, fz]` [N] to a Solid node at `offset` `[x, y, z]` in the node's coordinate system [m].
 
         Note: in R2025a the Python controller library calls `wb_supervisor_node_add_force` with the offset in
@@ -310,7 +311,7 @@ class Node:
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_add_force_with_offset
         """
 
-    def addTorque(self, torque: list[float], relative: bool) -> None:
+    def addTorque(self, torque: Sequence[float], relative: bool) -> None:
         """Add a torque `[tx, ty, tz]` [N⋅m] to a Solid node.
 
         Note: in R2025a the Python controller library calls `wb_supervisor_node_add_force`, so a force is applied

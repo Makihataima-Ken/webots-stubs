@@ -1,3 +1,4 @@
+from collections.abc import Sequence
 from typing import Final
 
 from typing_extensions import Never
@@ -59,10 +60,10 @@ class Display(Device):
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_draw_pixel
         """
 
-    def drawPolygon(self, x: list[int], y: list[int]) -> None:
+    def drawPolygon(self, x: Sequence[int], y: Sequence[int]) -> None:
         """Draw the outline of the polygon whose vertices have the coordinates `x` and `y` [pixels].
 
-        The shorter list sets the number of vertices. The loop is closed automatically.
+        The shorter sequence sets the number of vertices. The loop is closed automatically.
 
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_draw_polygon
         """
@@ -85,10 +86,10 @@ class Display(Device):
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_fill_oval
         """
 
-    def fillPolygon(self, x: list[int], y: list[int]) -> None:
+    def fillPolygon(self, x: Sequence[int], y: Sequence[int]) -> None:
         """Draw a filled polygon whose vertices have the coordinates `x` and `y` [pixels].
 
-        The shorter list sets the number of vertices.
+        The shorter sequence sets the number of vertices.
 
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_fill_polygon
         """
