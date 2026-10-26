@@ -72,8 +72,9 @@ class Car(Driver):
         """
 
     def getEngineType(self) -> int:
-        """Return the engine type: `Car.COMBUSTION_ENGINE`, `ELECTRIC_ENGINE`,
-        `PARALLEL_HYBRID_ENGINE` or `POWER_SPLIT_HYBRID_ENGINE`.
+        """Return the engine type, one of the `Car.*_ENGINE` constants.
+
+        These are `COMBUSTION_ENGINE`, `ELECTRIC_ENGINE`, `PARALLEL_HYBRID_ENGINE` and `POWER_SPLIT_HYBRID_ENGINE`.
 
         Reference: https://cyberbotics.com/doc/automobile/car-library?tab-language=python#wbu_car_get_engine_type
         """

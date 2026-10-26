@@ -23,12 +23,10 @@ class Emitter(Device):
     ) -> None:
         """Queue a data packet for the receivers within range.
 
-        A `str` is sent as its characters, but only `len(message)` bytes of its encoding, so pass `bytes`
-        for non-ASCII text; `bytes` as they are (`length` defaults to their size and is
-        ignored for other types), and a non-empty list or tuple is packed as C doubles if its first item
-        is a float, else as C ints. For other formats, pack the data with the `struct` module.
-        An empty list or unsupported type prints a message to stderr and sends nothing.
-        The packet is dropped if the queue is full.
+        A `bytes` message is sent as is (`length` defaults to its size and is ignored for other types). A `str` is
+        UTF-8 encoded but cut to `len(message)` bytes, so send non-ASCII text as `bytes`. A non-empty list or tuple
+        is packed as C doubles if its first item is a float, else as C ints (use `struct` for other formats). An
+        empty list or unsupported type prints an error to stderr and sends nothing; a full queue drops the packet.
 
         Reference: https://cyberbotics.com/doc/reference/emitter?tab-language=python#wb_emitter_send
         """

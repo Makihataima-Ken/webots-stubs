@@ -84,7 +84,6 @@ class Node:
 
         Only works on PROTO nodes.
 
-
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_get_from_proto_def
         """
 
@@ -165,7 +164,6 @@ class Node:
 
         The node must be a Pose-derived node (otherwise the values are NaN).
 
-
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_get_position
         """
 
@@ -173,7 +171,6 @@ class Node:
         """Return the 3x3 rotation matrix of the node in world coordinates, as 9 values in row-major order.
 
         The node must be a Pose-derived node (otherwise the values are NaN).
-
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_get_orientation
         """
@@ -236,7 +233,6 @@ class Node:
 
         The node must be a Solid.
 
-
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_get_velocity
         """
 
@@ -244,7 +240,6 @@ class Node:
         """Set the absolute velocity `[vx, vy, vz, wx, wy, wz]` of the node [m/s, rad/s].
 
         The node must be a Solid.
-
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_set_velocity
         """
@@ -305,8 +300,8 @@ class Node:
         """Add a force `[fx, fy, fz]` [N] to a Solid node at `offset` `[x, y, z]` in the node's coordinate system [m].
 
         Note: in R2025a the Python controller library calls `wb_supervisor_node_add_force` with the offset in
-        the `relative` slot, so the offset is ignored and a plain force is applied.
-
+        the `relative` slot, so the offset is ignored and a plain force is applied; `relative` is not honoured
+        either, as the offset pointer lands in the bool slot.
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_add_force_with_offset
         """
@@ -316,7 +311,6 @@ class Node:
 
         Note: in R2025a the Python controller library calls `wb_supervisor_node_add_force`, so a force is applied
         instead of a torque.
-
 
         Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python#wb_supervisor_node_add_torque
         """

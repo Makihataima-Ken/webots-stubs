@@ -1,4 +1,5 @@
 import ctypes
+from ctypes import _Pointer  # pyright: ignore[reportPrivateUsage]
 
 from typing_extensions import deprecated
 
@@ -104,7 +105,7 @@ class Receiver(Sensor):
         """The number of packets in the reception queue (same as `getQueueLength()`)."""
 
     @property
-    def data(self) -> ctypes._Pointer[ctypes.c_ubyte]:  # pyright: ignore[reportPrivateUsage]
+    def data(self) -> _Pointer[ctypes.c_ubyte]:
         """Pointer to the raw data of the head packet, valid until `nextPacket()` is called."""
 
     @property
