@@ -86,6 +86,8 @@ def main() -> int:
         own_args, stubtest_args = own_args[:split], own_args[split + 1 :]
     args = parser.parse_args(own_args)
 
+    if args.real and not os.environ.get("WEBOTS_HOME"):
+        parser.error("--real needs the WEBOTS_HOME environment variable; set it or pass --webots-home")
     if args.webots_home is not None or args.real:
         home = args.webots_home or Path(os.environ["WEBOTS_HOME"])
         os.environ["WEBOTS_HOME"] = str(home)
