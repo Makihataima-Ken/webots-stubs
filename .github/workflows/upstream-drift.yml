@@ -67,7 +67,7 @@ jobs:
           TITLE: Webots develop differs from the stubs
         run: |
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-          existing="$(gh issue list --state open --search "\"${TITLE}\" in:title" --json number --jq '.[0].number')"
+          existing="$(gh issue list --state open --search "\"${TITLE}\" in:title" --json number --jq '.[0].number // empty')"
           if [ "${DRIFT}" = "1" ]; then
             {
               echo "The weekly comparison with the \`develop\` branch of Webots found differences"
