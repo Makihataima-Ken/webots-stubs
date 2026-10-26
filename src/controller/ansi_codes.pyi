@@ -1,24 +1,49 @@
-from .constants import constant as constant
-from _typeshed import Incomplete
+from typing import Final
 
 class AnsiCodes:
-    RESET: Incomplete
-    BOLD: Incomplete
-    UNDERLINE: Incomplete
-    BLACK_BACKGROUND: Incomplete
-    RED_BACKGROUND: Incomplete
-    GREEN_BACKGROUND: Incomplete
-    YELLOW_BACKGROUND: Incomplete
-    BLUE_BACKGROUND: Incomplete
-    MAGENTA_BACKGROUND: Incomplete
-    CYAN_BACKGROUND: Incomplete
-    WHITE_BACKGROUND: Incomplete
-    BLACK_FOREGROUND: Incomplete
-    RED_FOREGROUND: Incomplete
-    GREEN_FOREGROUND: Incomplete
-    YELLOW_FOREGROUND: Incomplete
-    BLUE_FOREGROUND: Incomplete
-    MAGENTA_FOREGROUND: Incomplete
-    CYAN_FOREGROUND: Incomplete
-    WHITE_FOREGROUND: Incomplete
-    CLEAR_SCREEN: Incomplete
+    """ANSI escape codes to format the text printed in the Webots console (colors, bold, underline).
+
+    Print a code before the text to format it and `RESET` after it, e.g.
+    `print(AnsiCodes.RED_FOREGROUND + "error" + AnsiCodes.RESET)`.
+    """
+
+    RESET: Final[str]
+    """Reset all text attributes."""
+    BOLD: Final[str]
+    """Bold text."""
+    UNDERLINE: Final[str]
+    """Underlined text."""
+    BLACK_BACKGROUND: Final[str]
+    """Black background."""
+    RED_BACKGROUND: Final[str]
+    """Red background."""
+    GREEN_BACKGROUND: Final[str]
+    """Green background."""
+    YELLOW_BACKGROUND: Final[str]
+    """Yellow background."""
+    BLUE_BACKGROUND: Final[str]
+    """Blue background."""
+    MAGENTA_BACKGROUND: Final[str]
+    """Magenta background."""
+    CYAN_BACKGROUND: Final[str]
+    """Cyan background."""
+    WHITE_BACKGROUND: Final[str]
+    """White background."""
+    BLACK_FOREGROUND: Final[str]
+    """Black text."""
+    RED_FOREGROUND: Final[str]
+    """Red text."""
+    GREEN_FOREGROUND: Final[str]
+    """Green text."""
+    YELLOW_FOREGROUND: Final[str]
+    """Yellow text."""
+    BLUE_FOREGROUND: Final[str]
+    """Blue text."""
+    MAGENTA_FOREGROUND: Final[str]
+    """Magenta text."""
+    CYAN_FOREGROUND: Final[str]
+    """Cyan text."""
+    WHITE_FOREGROUND: Final[str]
+    """White text."""
+    CLEAR_SCREEN: Final[str]
+    """Clear the console."""
