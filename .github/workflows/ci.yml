@@ -5,12 +5,16 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  workflow_call:  # the Release workflow runs the full CI before publishing
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  # In a called workflow, github.workflow is the name of the caller: a run called by the
+  # Release workflow gets its own group and is never cancelled by a direct CI run (nor
+  # deadlocks with a concurrency group of the caller).
+  group: ci-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 env:

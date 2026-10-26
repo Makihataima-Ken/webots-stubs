@@ -8,8 +8,14 @@ permissions:
   contents: read
 
 jobs:
+  ci:
+    # Publish only a commit that passes the full CI.
+    name: CI
+    uses: ./.github/workflows/ci.yml
+
   build:
     name: Build the distribution
+    needs: ci
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

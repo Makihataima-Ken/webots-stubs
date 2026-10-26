@@ -150,8 +150,17 @@ issue open while they differ, so most changes are known before a release.
 4. Add a `CHANGELOG.md` entry and the new row of the version table in `README.md`.
 
 To publish a release, push a tag `v<version>` (e.g. `v2025.1.0`): the *Release*
-workflow checks that it matches `pyproject.toml`, builds the distribution and
-publishes it to PyPI with trusted publishing.
+workflow runs the full CI, checks that the tag matches `pyproject.toml`, builds the
+distribution and publishes it to PyPI with trusted publishing.
+
+Publishing needs a one-time setup:
+
+1. On PyPI, add a pending trusted publisher (*Your account* → *Publishing*) for the
+   project `webots-stubs`, with the owner and name of this GitHub repository, the
+   workflow `release.yml` and the environment `pypi`. The first release then creates
+   the project.
+2. On GitHub, create an environment named `pypi` (*Settings* → *Environments*).
+   Optionally, give it required reviewers to approve each upload.
 
 ## Pull requests
 
