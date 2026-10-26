@@ -1,0 +1,106 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "webots-stubs"
+version = "2025.1.0"
+description = "Type stubs for the Webots robot simulator Python API (controller and vehicle modules)"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Ken", email = "ahmadsoud63@gmail.com" }]
+requires-python = ">=3.9"
+keywords = ["webots", "robotics", "simulation", "robot", "stubs", "typing", "mypy", "pyright", "pep561"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Stubs Only",
+]
+
+[project.urls]
+"Webots" = "https://cyberbotics.com"
+"Webots API reference" = "https://cyberbotics.com/doc/reference/nodes-and-api-functions"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.18",
+    "pyright[nodejs]>=1.1.400",
+    "ruff>=0.13",
+    "pre-commit>=4",
+]
+
+[tool.uv]
+# The stubs are developed in importable directories (src/controller, src/vehicle) that the
+# type checkers read through mypy_path/stubPath; the wheel renames them to PEP 561
+# "-stubs" packages. Installing the project into the dev environment is not needed.
+package = false
+
+[tool.hatch.build.targets.wheel]
+only-include = ["src/controller", "src/vehicle"]
+
+[tool.hatch.build.targets.wheel.sources]
+"src/controller" = "controller-stubs"
+"src/vehicle" = "vehicle-stubs"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/scripts",
+    "/examples",
+    "/CHANGELOG.md",
+    "/CONTRIBUTING.md",
+]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+extend-exclude = [".upstream"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "UP",   # pyupgrade
+    "PYI",  # flake8-pyi
+    "RUF",  # ruff-specific rules
+]
+ignore = [
+    "PYI021",  # docstrings in stubs are intentional: IDEs show them on hover
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["controller", "vehicle"]
+
+[tool.mypy]
+mypy_path = "src"
+strict = true
+warn_unreachable = true
+enable_error_code = ["deprecated", "ignore-without-code", "redundant-expr", "truthy-bool"]
+exclude = ['^\.upstream/']
+
+[tool.pyright]
+include = ["src", "tests", "examples"]
+exclude = [".upstream", "**/__pycache__", ".venv"]
+stubPath = "src"
+typeCheckingMode = "strict"
+reportUnnecessaryTypeIgnoreComment = "error"
+reportDeprecated = "error"
+pythonVersion = "3.9"

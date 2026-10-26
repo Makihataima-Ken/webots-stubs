@@ -1,0 +1,11 @@
+webots-stubs
+Copyright 2026 Ken
+
+This product contains type stubs for the Python API of the Webots robot
+simulator (https://github.com/cyberbotics/webots). The API signatures and the
+documentation text in the stub docstrings are derived from the Webots source
+code and reference manual, Copyright 1996-2024 Cyberbotics Ltd., licensed under
+the Apache License, Version 2.0.
+
+Webots is a trademark of Cyberbotics Ltd. This project is not affiliated with
+or endorsed by Cyberbotics Ltd.
