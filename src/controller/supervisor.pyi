@@ -4,10 +4,11 @@ from .node import Node
 from .robot import Robot
 
 class Supervisor(Robot):
-    """A `Robot` with supervisor powers: it can inspect and modify the scene tree, control the simulation and
-    record movies and animations.
+    """A `Robot` with supervisor powers over the scene tree and the simulation.
 
-    The `supervisor` field of the robot must be TRUE. Only one `Robot` or `Supervisor` instance can be created.
+    A supervisor can inspect and modify the scene tree, control the simulation and record
+    movies and animations. The `supervisor` field of the robot must be TRUE. Only one
+    `Robot` or `Supervisor` instance can be created.
 
     Reference: https://cyberbotics.com/doc/reference/supervisor?tab-language=python
     """

@@ -96,9 +96,11 @@ annotations are a starting point, not the truth: always read the function body.
 - **Properties** keep their getter and setter together; setters return `None`.
   A write-only property (`force = property(fset=setForce)`) gets a getter typed
   `Never` and a docstring starting with "Write-only".
-- **Precise containers.** Use `list[float]`, `list[list[int]]`, etc. Where the
-  return type depends on an argument (such as `data_type="list"` versus a raw
-  ctypes buffer), use `@overload` with `Literal` arguments.
+- **Precise containers.** Return types use what the code returns: `list[float]`,
+  `list[list[int]]`, etc. Parameters accept what the code accepts: `Sequence[float]`
+  when upstream only unpacks or measures the value, and `list[...]` only when it checks
+  `isinstance(value, list)`. Where the return type depends on an argument (such as
+  `data_type="list"` versus a raw ctypes buffer), use `@overload` with `Literal` arguments.
 - **Deprecated API** (methods that print a `DEPRECATION` message) is decorated with
   `@deprecated("Use X instead.")` from `typing_extensions`.
 - **Imports.** Import within the package relatively (`from .device import Device`).
