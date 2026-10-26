@@ -111,10 +111,11 @@ class Display(Device):
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_get_width
         """
 
-    def imageCopy(self, x: int, y: int, width: int, height: int) -> int:
+    def imageCopy(self, x: int, y: int, width: int, height: int) -> int | None:
         """Copy a sub-image of the main display image to a new clipboard image and return its handle.
 
-        The sub-image has its top left pixel at (`x`, `y`) [pixels].
+        The sub-image has its top left pixel at (`x`, `y`) [pixels]. Return `None` if `width` or `height` is less
+        than 1.
 
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_image_copy
         """
@@ -125,18 +126,19 @@ class Display(Device):
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_image_delete
         """
 
-    def imageNew(self, data: bytes, format: int, width: int, height: int) -> int:
+    def imageNew(self, data: bytes, format: int, width: int, height: int) -> int | None:
         """Create a clipboard image from raw pixel `data` and return its handle.
 
-        `format` is one of `Display.RGB`, `RGBA`, `ARGB`, `BGRA` (recommended) or `ABGR`.
+        `format` is one of `Display.RGB`, `RGBA`, `ARGB`, `BGRA` (recommended) or `ABGR`. Return `None` if `width`
+        or `height` is less than 1 or `format` is invalid.
 
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_image_new
         """
 
-    def imageLoad(self, filename: str) -> int:
+    def imageLoad(self, filename: str) -> int | None:
         """Load a PNG or JPEG file (relative to the controller directory) into a new clipboard image.
 
-        Return the handle of the new image.
+        Return the handle of the new image, or `None` if `filename` is empty or the file is missing or unreadable.
 
         Reference: https://cyberbotics.com/doc/reference/display?tab-language=python#wb_display_image_load
         """

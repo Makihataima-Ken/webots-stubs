@@ -67,14 +67,16 @@ display.setFont("Arial", 16, True)
 display.drawText("hello", 0, 0)
 display.drawPolygon([0, 10, 5], [0, 0, 10])
 display.drawLine(0, 0, 10, 10)
+# Clipboard images are None when the file is unreadable or the arguments are invalid.
 image = display.imageLoad("icon.png")
-assert_type(image, int)
-assert_type(display.imageNew(b"\x00\x00\x00\xff", Display.BGRA, 1, 1), int)
-assert_type(display.imageCopy(0, 0, 4, 4), int)
-display.imagePaste(image, 0, 0, False)
-display.imageSave(image, "out.png")
+assert_type(image, int | None)
+assert_type(display.imageNew(b"\x00\x00\x00\xff", Display.BGRA, 1, 1), int | None)
+assert_type(display.imageCopy(0, 0, 4, 4), int | None)
+if image is not None:
+    display.imagePaste(image, 0, 0, False)
+    display.imageSave(image, "out.png")
+    display.imageDelete(image)
 display.imageSave(None, "main.png")
-display.imageDelete(image)
 
 # Emitter and Receiver
 emitter = Emitter("emitter")

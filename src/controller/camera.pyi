@@ -108,10 +108,12 @@ class Camera(Sensor):
         """
 
     def getImageArray(self) -> list[list[list[int]]] | None:
-        """Return the last image as nested lists indexed `[x][y]` of `[r, g, b]` pixels, or `None` if it is empty.
+        """Return the last image as `width` lists of `height` `[r, g, b]` pixels, or `None` if it is empty.
 
-        In R2025a the buffer is read as columns although it is stored by rows, so this is only correct for
-        square images; otherwise index `getImage()` directly, e.g. with `imageGetRed()`.
+        In R2025a the lists are filled in order from the row-major buffer, not indexed `[x][y]` as documented: for a
+        square image `array[a][b]` is the pixel at x=b, y=a (the image is transposed, i.e. indexed `[y][x]`), and
+        for other shapes the pixels are scrambled. For reliable access, use `getImage()` with `imageGetRed()`,
+        `imageGetGreen()` and `imageGetBlue()`.
 
         Reference: https://cyberbotics.com/doc/reference/camera?tab-language=python#wb_camera_get_image
         """
@@ -343,10 +345,11 @@ class Camera(Sensor):
         """
 
     def getRecognitionSegmentationImageArray(self) -> list[list[list[int]]] | None:
-        """Return the last segmentation image as nested lists indexed `[x][y]` of `[r, g, b]` pixels, or `None`.
+        """Return the last segmentation image as `width` lists of `height` `[r, g, b]` pixels, or `None`.
 
-        In R2025a the buffer is read as columns although it is stored by rows, so this is only correct for
-        square images; otherwise index `getRecognitionSegmentationImage()` directly.
+        As with `getImageArray()`, R2025a fills the lists in order from the row-major buffer: a square image is
+        transposed (indexed `[y][x]`) and other shapes are scrambled. For reliable access, use
+        `getRecognitionSegmentationImage()` with `imageGetRed()`, `imageGetGreen()` and `imageGetBlue()`.
 
         Reference: https://cyberbotics.com/doc/reference/camera?tab-language=python#wb_camera_recognition_get_segmentation_image
         """
