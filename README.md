@@ -18,7 +18,9 @@ package fixes that. It gives VS Code (Pylance), PyCharm, mypy and pyright:
 - **precise types** taken from the code Webots actually runs: methods that can return
   `None` say so, raw ctypes buffers are not passed off as lists, overloads follow arguments
   such as `data_type`, and constants are `Final`;
-- **deprecation warnings** for deprecated API such as `Robot.getMotor()`;
+- **deprecation markers** on deprecated API such as `Robot.getMotor()`: Pylance strikes it
+  through, mypy reports it with `--enable-error-code deprecated` and pyright with
+  `reportDeprecated`;
 - **notes on runtime quirks** of the Webots release where its behavior differs from the
   manual.
 
