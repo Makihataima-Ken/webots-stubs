@@ -1,3 +1,11 @@
+"""Python API of the Webots robot simulator, used by robot controllers.
+
+Webots adds this package to the path of the controllers it starts; it is not
+installed from PyPI. These stubs only describe it for type checkers and IDEs.
+
+Reference: https://cyberbotics.com/doc/reference/nodes-and-api-functions
+"""
+
 from controller.accelerometer import Accelerometer as Accelerometer
 from controller.altimeter import Altimeter as Altimeter
 from controller.ansi_codes import AnsiCodes as AnsiCodes
