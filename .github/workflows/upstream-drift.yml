@@ -1,7 +1,11 @@
 name: Upstream drift
 
-# Compares the stubs with the development branch of Webots every week, so that API
-# changes are noticed before they ship in a release.
+# Compares the stubs with the develop branch of Webots every week, so that API changes are
+# noticed before they ship in a release (master only receives the releases).
+#
+# The comparison imports the upstream Python code, so its job has read-only permissions and
+# no stored credentials. A separate job, which runs no upstream code, opens, updates or
+# closes the drift issue from the report it uploads.
 
 on:
   schedule:
@@ -10,49 +14,75 @@ on:
 
 permissions:
   contents: read
-  issues: write
 
 jobs:
   drift:
-    name: Compare the stubs with Webots master
+    name: Compare the stubs with Webots develop
     runs-on: ubuntu-latest
+    outputs:
+      drift: ${{ steps.compare.outputs.drift }}
     steps:
       - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --locked
-      - name: Fetch Webots master
-        run: uv run python scripts/fetch_upstream.py --tag master
+      - name: Fetch Webots develop
+        run: uv run python scripts/fetch_upstream.py --tag develop
       - name: Compare
         id: compare
         run: |
           status=0
           {
-            echo '$ scripts/run_stubtest.py --tag master'
-            uv run python scripts/run_stubtest.py --tag master -- --concise || status=1
+            echo '$ scripts/run_stubtest.py --tag develop'
+            uv run python scripts/run_stubtest.py --tag develop -- --concise || status=1
             echo
-            echo '$ scripts/check_api_coverage.py --tag master'
-            uv run python scripts/check_api_coverage.py --tag master || status=1
+            echo '$ scripts/check_api_coverage.py --tag develop'
+            uv run python scripts/check_api_coverage.py --tag develop || status=1
           } > drift.txt 2>&1
           cat drift.txt
           echo "drift=${status}" >> "$GITHUB_OUTPUT"
-      - name: Report the drift in an issue
-        if: steps.compare.outputs.drift == '1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: drift-report
+          path: drift.txt
+          if-no-files-found: error
+          retention-days: 30
+
+  report:
+    name: Report the drift in an issue
+    needs: drift
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: drift-report
+      - name: Open, update or close the drift issue
         env:
           GH_TOKEN: ${{ github.token }}
-          TITLE: Webots master differs from the stubs
+          GH_REPO: ${{ github.repository }}
+          DRIFT: ${{ needs.drift.outputs.drift }}
+          TITLE: Webots develop differs from the stubs
         run: |
-          {
-            echo "The weekly comparison with the \`master\` branch of Webots found differences"
-            echo "([workflow run](${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}))."
-            echo "They may need stub changes for the next Webots release."
-            echo
-            echo '```'
-            head -c 60000 drift.txt
-            echo '```'
-          } > body.md
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           existing="$(gh issue list --state open --search "\"${TITLE}\" in:title" --json number --jq '.[0].number')"
-          if [ -n "${existing}" ]; then
-            gh issue edit "${existing}" --body-file body.md
-          else
-            gh issue create --title "${TITLE}" --body-file body.md
+          if [ "${DRIFT}" = "1" ]; then
+            {
+              echo "The weekly comparison with the \`develop\` branch of Webots found differences"
+              echo "([workflow run](${run_url})). They may need stub changes for the next Webots release."
+              echo
+              echo '```'
+              head -c 60000 drift.txt
+              echo '```'
+            } > body.md
+            if [ -n "${existing}" ]; then
+              gh issue edit "${existing}" --body-file body.md
+            else
+              gh issue create --title "${TITLE}" --body-file body.md
+            fi
+          elif [ -n "${existing}" ]; then
+            gh issue close "${existing}" --comment \
+              "The weekly comparison with the \`develop\` branch of Webots no longer finds differences ([workflow run](${run_url}))."
           fi

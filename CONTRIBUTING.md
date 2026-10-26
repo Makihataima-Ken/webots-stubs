@@ -136,8 +136,9 @@ used for property setters, `__del__` and constructors users do not call themselv
 
 ## Updating to a new Webots release
 
-The weekly *Upstream drift* workflow compares the stubs with the `master` branch of
-Webots and opens an issue when they differ, so most changes are known before a release.
+The weekly *Upstream drift* workflow compares the stubs with the `develop` branch of
+Webots, where development happens (`master` only receives the releases), and keeps an
+issue open while they differ, so most changes are known before a release.
 
 1. Set `webots-tag` in `pyproject.toml` to the new release (e.g. `R2026a`) and fetch it:
    `uv run python scripts/fetch_upstream.py`.

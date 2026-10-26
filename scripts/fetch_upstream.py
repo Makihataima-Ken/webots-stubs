@@ -13,7 +13,7 @@ Usage::
     python scripts/fetch_upstream.py [--tag TAG] [--dest .upstream] [--force]
 
 TAG defaults to ``webots-tag`` in the ``[tool.webots-stubs]`` table of pyproject.toml; any
-Webots git tag or branch (e.g. ``master``) works.
+Webots git tag or branch (e.g. ``develop``) works.
 """
 
 from __future__ import annotations

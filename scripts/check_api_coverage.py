@@ -1,7 +1,7 @@
 """Check that the stubs cover the upstream API and that every public stub item is documented.
 
 Unlike stubtest, this check only parses source code, so it also works on an upstream
-branch whose native library would not match (e.g. to spot API drift on ``master``).
+branch whose native library would not match (e.g. to spot API drift on ``develop``).
 It reports:
 
 * public classes, functions, methods, properties, constants and instance attributes of
