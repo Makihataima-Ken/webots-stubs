@@ -63,6 +63,12 @@ assert_type(finder.max_range, float)
 assert_type(finder.width, int)
 assert_type(finder.saveImage("depth.hdr", 100), int)
 
+
+def range_image(data_type: str) -> None:
+    # A data_type only known as a str gives either result.
+    assert_type(finder.getRangeImage(data_type), list[float] | _Pointer[ctypes.c_float])
+
+
 # Lidar
 lidar = Lidar("lidar")
 assert_type(lidar.getRangeImage(), list[float])

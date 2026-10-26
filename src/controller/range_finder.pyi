@@ -57,6 +57,10 @@ class RangeFinder(Sensor):
     def getRangeImage(self, data_type: Literal["buffer"]) -> _Pointer[ctypes.c_float]:
         """Return the native ctypes buffer of the last range image: `width * height` floats [m], not copied."""
 
+    @overload
+    def getRangeImage(self, data_type: str) -> list[float] | _Pointer[ctypes.c_float]:
+        """Return the list for `data_type="list"`, else the native ctypes buffer of the last range image."""
+
     def getRangeImageArray(self) -> list[list[float]]:
         """Return the last range image as `height` rows of `width` depths [m].
 
