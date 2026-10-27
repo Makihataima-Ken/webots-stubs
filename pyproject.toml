@@ -31,6 +31,10 @@ classifiers = [
 ]
 
 [project.urls]
+Homepage = "https://github.com/Makihataima-Ken/webots-stubs"
+Repository = "https://github.com/Makihataima-Ken/webots-stubs"
+Issues = "https://github.com/Makihataima-Ken/webots-stubs/issues"
+Changelog = "https://github.com/Makihataima-Ken/webots-stubs/blob/main/CHANGELOG.md"
 "Webots" = "https://cyberbotics.com"
 "Webots API reference" = "https://cyberbotics.com/doc/reference/nodes-and-api-functions"
 

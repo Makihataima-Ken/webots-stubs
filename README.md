@@ -2,7 +2,8 @@
 
 [![PyPI](https://img.shields.io/pypi/v/webots-stubs)](https://pypi.org/project/webots-stubs/)
 [![Python versions](https://img.shields.io/pypi/pyversions/webots-stubs)](https://pypi.org/project/webots-stubs/)
-[![License](https://img.shields.io/pypi/l/webots-stubs)](LICENSE)
+[![CI](https://github.com/Makihataima-Ken/webots-stubs/actions/workflows/ci.yml/badge.svg)](https://github.com/Makihataima-Ken/webots-stubs/actions/workflows/ci.yml)
+[![License](https://img.shields.io/pypi/l/webots-stubs)](https://github.com/Makihataima-Ken/webots-stubs/blob/main/LICENSE)
 
 Type stubs for the Python API of the [Webots](https://cyberbotics.com) robot simulator.
 
@@ -45,6 +46,12 @@ Install the stubs into the Python environment that your editor or type checker u
 
 ```sh
 pip install webots-stubs
+```
+
+To install the latest development version from GitHub instead:
+
+```sh
+pip install "webots-stubs @ git+https://github.com/Makihataima-Ken/webots-stubs"
 ```
 
 Then pick the stubs version that matches your Webots release:
@@ -117,7 +124,7 @@ translation = robot_node.getField("translation")
 `controller` package does not export at run time, such as `Device` and `Pen`, must be
 imported from their module: `from controller.pen import Pen`.
 
-The [`examples`](examples) directory contains complete typed controllers.
+The [`examples`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/examples) directory contains complete typed controllers.
 
 ## How the stubs are checked
 
@@ -127,12 +134,12 @@ The [`examples`](examples) directory contains complete typed controllers.
 - The Python sample controllers shipped with Webots are type-checked against the stubs.
   Every error they produce is reviewed, which catches stubs that are too strict.
 - mypy and pyright check the stubs, the type-checking tests in
-  [`tests/typecheck`](tests/typecheck) and the examples in strict mode.
+  [`tests/typecheck`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/tests/typecheck) and the examples in strict mode.
 - A coverage check makes sure no public name is missing and every item is documented.
 
 ## Contributing
 
-Bug reports and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the
+Bug reports and pull requests are welcome. See [CONTRIBUTING.md](https://github.com/Makihataima-Ken/webots-stubs/blob/main/CONTRIBUTING.md) for the
 development setup and the conventions the stubs follow.
 
 ## Prior work
@@ -148,5 +155,5 @@ nothing.
 
 Apache License 2.0, the same as Webots. The stubs and their docstrings are derived from
 the Webots source code and reference manual (Copyright Cyberbotics Ltd.); see
-[NOTICE](NOTICE). Webots is a trademark of Cyberbotics Ltd. This project is not affiliated
+[NOTICE](https://github.com/Makihataima-Ken/webots-stubs/blob/main/NOTICE). Webots is a trademark of Cyberbotics Ltd. This project is not affiliated
 with or endorsed by Cyberbotics Ltd.
