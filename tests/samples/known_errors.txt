@@ -13,6 +13,7 @@ projects/default/controllers/sumo_supervisor/SumoSupervisor.py:73: Item "None" o
 projects/default/controllers/sumo_supervisor/SumoSupervisor.py:74: Item "None" of "Node | Any | None" has no attribute "getType"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/default/controllers/sumo_supervisor/SumoSupervisor.py:75: Item "None" of "Node | Any | None" has no attribute "getField"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/default/controllers/sumo_supervisor/sumo_supervisor.py:47: Value of type variable "AnyOrLiteralStr" of "normpath" cannot be "str | None"  [type-var]  # os.environ.get() may return None
+projects/default/controllers/sumo_supervisor/sumo_supervisor.py:63: Argument 1 to "join" has incompatible type "str | None"; expected "str"  [arg-type]  # os.environ.get() may return None
 projects/humans/c3d/controllers/c3d_viewer/c3d_viewer.py:132: Item "None" of "Field | None" has no attribute "importMFNodeFromString"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/humans/c3d/controllers/c3d_viewer/c3d_viewer.py:136: Incompatible types in assignment (expression has type "Node | Any | None", target has type "str")  [assignment]  # sample reuses a variable for values of other types
 projects/humans/c3d/controllers/c3d_viewer/c3d_viewer.py:136: Item "None" of "Field | None" has no attribute "getMFNode"  [union-attr]  # sample ignores the None result of a lookup that can fail
@@ -52,11 +53,14 @@ projects/languages/python/controllers/slave/slave.py:81: "Enumerate" has no attr
 projects/languages/python/controllers/slave/slave.py:84: "Enumerate" has no attribute "TURN"  [attr-defined]  # sample builds an enum dynamically
 projects/robots/abb/irb/controllers/inverse_kinematics/inverse_kinematics.py:94: Item "None" of "Node | None" has no attribute "getPosition"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/robots/epson/scara_t6/controllers/scara_food_industry/scara_food_industry.py:47: Item "None" of "Node | None" has no attribute "getPosition"  [union-attr]  # sample ignores the None result of a lookup that can fail
+projects/samples/devices/controllers/camera/camera.py:22: Module "ctypes" has no attribute "windll"  [attr-defined]  # sample imports a Windows-only name behind an os.name check, which mypy cannot narrow
+projects/samples/devices/controllers/display_supervisor/display_supervisor.py:23: Module "ctypes" has no attribute "windll"  [attr-defined]  # sample imports a Windows-only name behind an os.name check, which mypy cannot narrow
 projects/samples/devices/controllers/display_supervisor/display_supervisor.py:44: Item "None" of "Node | None" has no attribute "getField"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/samples/devices/controllers/display_supervisor/display_supervisor.py:57: Item "None" of "Field | Any | None" has no attribute "getSFVec3f"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/samples/devices/controllers/gps_supervisor/gps_supervisor.py:33: Item "None" of "Node | None" has no attribute "getField"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/samples/devices/controllers/gps_supervisor/gps_supervisor.py:38: Item "None" of "Field | Any | None" has no attribute "getSFVec3f"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/samples/devices/controllers/lidar/lidar.py:52: No overload variant of "__setitem__" of "list" matches argument types "int", "float"  [call-overload]  # sample stores floats in a list inferred as list[int]
+projects/samples/devices/controllers/range_finder/range_finder.py:22: Module "ctypes" has no attribute "windll"  [attr-defined]  # sample imports a Windows-only name behind an os.name check, which mypy cannot narrow
 projects/samples/devices/controllers/sample_supervisor/sample_supervisor.py:33: Item "None" of "Field | None" has no attribute "getCount"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/samples/devices/controllers/sample_supervisor/sample_supervisor.py:37: Item "None" of "Field | None" has no attribute "getMFNode"  [union-attr]  # sample ignores the None result of a lookup that can fail
 projects/samples/devices/controllers/sample_supervisor/sample_supervisor.py:38: Item "None" of "Node | Any | None" has no attribute "getTypeName"  [union-attr]  # sample ignores the None result of a lookup that can fail
