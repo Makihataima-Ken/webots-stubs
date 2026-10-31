@@ -10,7 +10,8 @@ First release, for Webots R2025a.
 
 - Complete stubs for the `controller` and `vehicle` packages: every class, method,
   property and constant of the Webots R2025a Python API.
-- Docstrings for every item, with units and links to the Webots reference manual.
+- Docstrings for every class, method, property and constant, with units and, for the
+  API functions, links to the Webots reference manual.
 - Types taken from the code Webots runs: `None` results of lookups that can fail,
   ctypes buffers where the API returns them, overloads for arguments that change the
   return type, `Final` constants and deprecation markers.

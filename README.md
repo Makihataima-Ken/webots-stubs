@@ -3,19 +3,22 @@
 [![PyPI](https://img.shields.io/pypi/v/webots-stubs)](https://pypi.org/project/webots-stubs/)
 [![Python versions](https://img.shields.io/pypi/pyversions/webots-stubs)](https://pypi.org/project/webots-stubs/)
 [![CI](https://github.com/Makihataima-Ken/webots-stubs/actions/workflows/ci.yml/badge.svg)](https://github.com/Makihataima-Ken/webots-stubs/actions/workflows/ci.yml)
-[![License](https://img.shields.io/pypi/l/webots-stubs)](https://github.com/Makihataima-Ken/webots-stubs/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/Makihataima-Ken/webots-stubs)](https://github.com/Makihataima-Ken/webots-stubs/blob/main/LICENSE)
 
 Type stubs for the Python API of the [Webots](https://cyberbotics.com) robot simulator.
 
 Webots runs Python controllers with its own `controller` and `vehicle` packages, which
-live inside the Webots installation rather than on PyPI. Editors and type checkers
-therefore cannot see them, so there is no autocompletion and no type checking. This
-package fixes that. It gives VS Code (Pylance), PyCharm, mypy and pyright:
+live inside the Webots installation rather than on PyPI. Editors and type checkers do
+not find them unless you point them at that installation, and even then the sources
+help little: they have no docstrings, and many of their type annotations are missing or
+wrong. This package fixes that. It gives VS Code (Pylance), PyCharm, mypy and pyright:
 
 - **full autocompletion** for every class, method, property and constant of the
-  `controller` and `vehicle` packages;
-- **hover documentation** for every item, with units (`[rad]`, `[m/s]`, `[ms]`, ...) and a
-  link to the matching section of the Webots reference manual;
+  `controller` and `vehicle` packages (for devices, annotate the variable: see
+  *Working with the types* below);
+- **hover documentation** for every class, method, property and constant, with units
+  (`[rad]`, `[m/s]`, `[ms]`, ...) and, for the API functions, a link to their section of
+  the Webots reference manual;
 - **precise types** taken from the code Webots actually runs: methods that can return
   `None` say so, raw ctypes buffers are not passed off as lists, overloads follow arguments
   such as `data_type`, and constants are `Final`;
@@ -42,23 +45,28 @@ while robot.step(timestep) != -1:
 
 ## Installation
 
-Install the stubs into the Python environment that your editor or type checker uses:
+webots-stubs requires Python 3.10 or later. Install it into the Python environment that
+your editor or type checker uses:
 
 ```sh
 pip install webots-stubs
 ```
+
+In a [uv](https://docs.astral.sh/uv/) project, add it as a development dependency
+instead: `uv add --dev webots-stubs`.
+
+Each stubs version describes one Webots release. Pin the version that matches yours,
+for example `pip install "webots-stubs==2025.1.*"` for R2025a:
+
+| Webots | webots-stubs |
+| ------ | ------------ |
+| R2025a | 2025.1.*     |
 
 To install the latest development version from GitHub instead:
 
 ```sh
 pip install "webots-stubs @ git+https://github.com/Makihataima-Ken/webots-stubs"
 ```
-
-Then pick the stubs version that matches your Webots release:
-
-| Webots | webots-stubs |
-| ------ | ------------ |
-| R2025a | 2025.1.*     |
 
 The package contains type information only (PEP 561 `controller-stubs` and
 `vehicle-stubs`). At run time your controllers keep using the modules that Webots
@@ -79,15 +87,18 @@ to your `settings.json`:
 ```
 
 **PyCharm**: select the interpreter where you installed the stubs. If you added
-`$WEBOTS_HOME/lib/controller/python` to the interpreter paths and completion does not
-pick up the stubs, remove that path.
+`$WEBOTS_HOME/lib/controller/python` to the project (as a content root) or to the
+interpreter paths and completion does not pick up the stubs, remove it there. To run
+controllers from PyCharm as extern controllers, add that directory to `PYTHONPATH` in
+the environment variables of the run configuration instead: it is then used only when
+the controller runs.
 
-**pyright**: nothing to configure; set `reportMissingModuleSource = "none"` to silence the
-warning described above. Like Pylance, pyright prefers code listed in `extraPaths` over
-the stubs.
+**pyright**: nothing to configure. To silence the warning described above, set
+`reportMissingModuleSource` to `"none"` in your pyright configuration. Like Pylance,
+pyright prefers code listed in `extraPaths` over the stubs.
 
-**mypy**: nothing to configure. Do not put the Webots controller directory on `MYPYPATH`,
-for the same reason.
+**mypy**: nothing to configure. Do not put the Webots controller directory on `MYPYPATH`
+or `mypy_path`, for the same reason.
 
 The stubs themselves are checked with mypy and pyright in strict mode.
 
@@ -120,11 +131,12 @@ if robot_node is None:
 translation = robot_node.getField("translation")
 ```
 
-**Importing device classes.** Import them from `controller` as usual. A few classes that the
-`controller` package does not export at run time, such as `Device` and `Pen`, must be
-imported from their module: `from controller.pen import Pen`.
+**Importing device classes.** Import them from `controller` as usual. The three classes
+that the `controller` package does not export at run time, `Device`, `Sensor` and `Pen`,
+must be imported from their module, for example `from controller.pen import Pen`.
 
-The [`examples`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/examples) directory contains complete typed controllers.
+The [`examples`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/examples)
+directory contains complete typed controllers.
 
 ## How the stubs are checked
 
@@ -134,13 +146,16 @@ The [`examples`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/examp
 - The Python sample controllers shipped with Webots are type-checked against the stubs.
   Every error they produce is reviewed, which catches stubs that are too strict.
 - mypy and pyright check the stubs, the type-checking tests in
-  [`tests/typecheck`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/tests/typecheck) and the examples in strict mode.
-- A coverage check makes sure no public name is missing and every item is documented.
+  [`tests/typecheck`](https://github.com/Makihataima-Ken/webots-stubs/tree/main/tests/typecheck)
+  and the examples in strict mode.
+- A coverage check makes sure no public name is missing and every class, method,
+  property and constant is documented.
 
 ## Contributing
 
-Bug reports and pull requests are welcome. See [CONTRIBUTING.md](https://github.com/Makihataima-Ken/webots-stubs/blob/main/CONTRIBUTING.md) for the
-development setup and the conventions the stubs follow.
+Bug reports and pull requests are welcome. See
+[CONTRIBUTING.md](https://github.com/Makihataima-Ken/webots-stubs/blob/main/CONTRIBUTING.md)
+for the development setup and the conventions the stubs follow.
 
 ## Prior work
 
@@ -148,12 +163,12 @@ Type annotations for the Webots Python API have been discussed upstream in
 [cyberbotics/webots#2385](https://github.com/cyberbotics/webots/issues/2385) and
 [#2959](https://github.com/cyberbotics/webots/issues/2959). A stubs package was prototyped
 in [cyberbotics/webots#5472](https://github.com/cyberbotics/webots/pull/5472). This project
-takes the idea further as a standalone package, so that it costs the Webots maintainers
-nothing.
+takes the idea further as a standalone package that needs no changes to Webots.
 
 ## License
 
 Apache License 2.0, the same as Webots. The stubs and their docstrings are derived from
 the Webots source code and reference manual (Copyright Cyberbotics Ltd.); see
-[NOTICE](https://github.com/Makihataima-Ken/webots-stubs/blob/main/NOTICE). Webots is a trademark of Cyberbotics Ltd. This project is not affiliated
-with or endorsed by Cyberbotics Ltd.
+[NOTICE](https://github.com/Makihataima-Ken/webots-stubs/blob/main/NOTICE). Webots is a
+trademark of Cyberbotics Ltd. This project is not affiliated with or endorsed by
+Cyberbotics Ltd.
